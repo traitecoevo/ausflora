@@ -4,7 +4,7 @@
 # We have established spreadsheets with benchmarks of expected ouput
 
 test_that("consistency with previous runs", {
-  
+  if(is.null(resources)) skip("Server down.")
   # Check that results are consistent through time
 
   taxa <-
@@ -50,6 +50,8 @@ test_that("consistency with previous runs", {
   })
 
 test_that("taxon name splits and complex taxonomic status values work as expected", {
+  
+  if(is.null(resources)) skip("Server down.")
   # Compare results to a table of values that have been closely scrutinised
   benchmarks <- 
     readr::read_csv("benchmarks/test_splits_synonyms.csv", show_col_types = FALSE) %>%
@@ -112,6 +114,8 @@ test_that("taxon name splits and complex taxonomic status values work as expecte
   })
 
 test_that("taxon name alignment matches and updates work as expected", {
+  
+  if(is.null(resources)) skip("Server down.")
 
   # Compare results to a table of values that have been closely scrutinised
   

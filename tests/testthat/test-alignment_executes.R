@@ -5,6 +5,7 @@
 # occurs in the file "test-alignment-results.R"
 
 test_that("create_taxonomic_update_lookup() returns more/less rows as requested", {
+  if(is.null(resources)) skip("Server down.")
   original_name <- 
     c(
       "Banksia integrifolia",
@@ -60,6 +61,7 @@ test_that("create_taxonomic_update_lookup() returns more/less rows as requested"
   })
 
 test_that("align_taxa() executes - no/with fuzzy", {
+  if(is.null(resources)) skip("Server down.")
   
   original_name <- c("Dryandra preissii", "Banksia acuminata", "Bannksia accuminata")
   aligned_name <- c("Dryandra preissii", "Banksia acuminata", "Banksia acuminata")
@@ -78,6 +80,7 @@ test_that("align_taxa() executes - no/with fuzzy", {
 
 
 test_that("align_taxa() executes with longer list", {
+  if(is.null(resources)) skip("Server down.")
   species_list <-
     readr::read_csv(system.file("extdata", "species.csv", package = "APCalign"),
                     show_col_types = FALSE) %>% 
@@ -89,6 +92,7 @@ test_that("align_taxa() executes with longer list", {
   })
 
 test_that("update_taxonomy() runs and prdouces suitable structure", {
+  if(is.null(resources)) skip("Server down.")
   
   original_name <- c("Dryandra preissii", "Banksia acuminata")
   
@@ -119,6 +123,7 @@ test_that("update_taxonomy() runs and prdouces suitable structure", {
 })
 
 test_that("check runs with weird hybrid symbols", {
+  if(is.null(resources)) skip("Server down.")
   original_name <- c("Platanus × acerifolia", "Platanus × hispanica")
   
   out <- align_taxa(original_name, resources = resources)
@@ -129,6 +134,7 @@ test_that("check runs with weird hybrid symbols", {
 })
 
 test_that("handles NAs inn inputs", {
+  if(is.null(resources)) skip("Server down.")
   original_name <- c("Acacia aneura", NA)
 
   out1 <- align_taxa(original_name, resources = resources)
@@ -151,6 +157,7 @@ test_that("handles NAs inn inputs", {
 
 
 test_that("handles weird strings", {
+  if(is.null(resources)) skip("Server down.")
   test_strings <- c("", "''", "'", "          ", "\t", "\n", "stuff with      ",
                     "test'string'withquotes", 
                     "!@#$%^&*()_+", 
@@ -187,6 +194,7 @@ test_that("handles weird strings", {
   })
 
 test_that("handles APNI taxa and genus level IDs",{
+  if(is.null(resources)) skip("Server down.")
   
   original_name <- c("Acacia sp.", "Dendropanax amplifolius", "Acanthopanax divaricatum", "Eucalyptus sp.")
   taxon_rank <- c("genus", "species", "species", "genus")
@@ -220,6 +228,7 @@ test_that("handles APNI taxa and genus level IDs",{
   })
 
 test_that("Runs when neither taxa in in APC", {
+  if(is.null(resources)) skip("Server down.")
   original_name <- c("Acacia sp", "Banksia sp")
   
   out <- 
@@ -233,6 +242,7 @@ test_that("Runs when neither taxa in in APC", {
   })
 
 test_that("no matches to APC accepted names are required", {
+  if(is.null(resources)) skip("Server down.")
   # some genus matches
   out1 <- create_taxonomic_update_lookup(taxa = c("Eucalyptus", "Banksia asdasd", "Ryandra sp"), resources = resources)
   expect_equal(nrow(out1), 3)
@@ -244,6 +254,7 @@ test_that("no matches to APC accepted names are required", {
 })
 
 test_that("returns same number of rows as input, even with duplicates", {
+  if(is.null(resources)) skip("Server down.")
   
   original_name <-
     c("Dryandra preissii", "Banksia acuminata", 

@@ -1,5 +1,6 @@
 
 test_that("state_diversity() works", {
+  if(is.null(resources)) skip("Server down.")
   nsw_species_counts <-
     state_diversity_counts(state = "NSW", resources = resources)
   expect_true(
@@ -15,6 +16,7 @@ test_that("state_diversity() works", {
 
 
 test_that("native_anywhere_in_australia() works", {
+  if(is.null(resources)) skip("Server down.")
   expect_warning(native_check <-
     native_anywhere_in_australia(
       c(
