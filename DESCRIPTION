@@ -26,6 +26,7 @@ Imports:
     stringi,
     arrow,
     crayon,
+    parallel,
     gh
 Suggests:
     janitor,
