@@ -1,10 +1,13 @@
 
 
 
-split_vector <- function(v, N=(detectCores() - 1)) {
+# why isn't there a base R function that does this?
+split_vector <- function(v, N = (detectCores() - 1)) {
   # Check for edge cases
-  if (N <= 0) stop("N should be greater than 0")
-  if (length(v) == 0) return(vector("list", N))
+  if (N <= 0)
+    stop("N should be greater than 0")
+  if (length(v) == 0)
+    return(vector("list", N))
   
   # Calculate chunk size
   chunk_size <- floor(length(v) / N)
@@ -29,14 +32,21 @@ split_vector <- function(v, N=(detectCores() - 1)) {
 }
 
 
-multicore_tax_update <- function(data_vec, cores = detectCores() - 1,resources=resources,taxonomic_splits="most_likely_species") {
-  # Split the vector into a list of individual elements
-  data_list <- split_vector(data_vec, N=cores)
-  
-  results <- mclapply(data_list, function(x) create_taxonomic_update_lookup(x,resources=resources,taxonomic_splits=taxonomic_splits), mc.cores = cores)
-  
-  # Bind all results together into a single dataframe
-  result_df <- do.call(rbind, results)
-  
-  return(result_df)
-}
+multicore_tax_update <-
+  function(data_vec,
+           cores = detectCores() - 1,
+           resources = resources,
+           taxonomic_splits = "most_likely_species") {
+    # Split the vector into a list of individual elements
+    data_list <- split_vector(data_vec, N = cores)
+    
+    results <-
+      mclapply(data_list, function(x)
+        create_taxonomic_update_lookup(x, resources = resources, taxonomic_splits =
+                                         taxonomic_splits), mc.cores = cores)
+    
+    # Bind all results together into a single dataframe
+    result_df <- do.call(rbind, results)
+    
+    return(result_df)
+  }
