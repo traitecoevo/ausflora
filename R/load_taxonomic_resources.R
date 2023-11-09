@@ -355,12 +355,12 @@ dataset_get <- function(version = default_version(),
       "/apni.parquet"
     )
     
-#  apni_hash <- tryCatch({
-#    contentid::register(url)
-#  }, error = function(e) {
-#    message("The server might be down.")
+  apni_hash <- tryCatch({
+        contentid::register(url)
+  }, error = function(e) {
+   message("The server might be down.")
     return(NULL)
-#  })
+  })
   
   apni_file <- contentid::resolve(apni_hash, store = TRUE, path = path)
   
