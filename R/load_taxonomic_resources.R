@@ -29,7 +29,8 @@ load_taxonomic_resources <-
       dataset_access_function(version = version,
                               path = NULL,
                               type = stable_or_current_data)
-    names(taxonomic_resources) <- c("APC", "APNI")
+   if (is.null(taxonomic_resources)) return(NULL)
+     names(taxonomic_resources) <- c("APC", "APNI")
     
     ## todo :review this, why zzz
     ### Note: Use `zzzz zzzz` because the fuzzy matching algorithm can't handles NA's
@@ -354,7 +355,13 @@ dataset_get <- function(version = default_version(),
       "/apni.parquet"
     )
     
-  apni_hash <- contentid::register(url)
+#  apni_hash <- tryCatch({
+#    contentid::register(url)
+#  }, error = function(e) {
+#    message("The server might be down.")
+    return(NULL)
+#  })
+  
   apni_file <- contentid::resolve(apni_hash, store = TRUE, path = path)
   
   #only getting APNI names that are not in APC
