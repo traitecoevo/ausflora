@@ -60,11 +60,11 @@ APCalign_outputs_documentation <-
   )
 ```
 
-# Aligning taxa with APC and APNI
+# Aligning taxon names with taxon concepts/names in APC and APNI
 
-XXXX
+The following table indicates the rules for each of the 51 separate algorithms sequentially applied to attempt to align each submitted name to a taxon concept in APC or scientific names in APNI.
 
-The following 
+Note, if the table is truncated on your screen, use horizontal scroll to view the entire table.
 
 ```{r, results='show'}
 match_taxa_documentation %>%
@@ -74,13 +74,26 @@ match_taxa_documentation %>%
 
 # Updating taxonomy
 
-XXX
+The following table indicates the separate functions used to:  
+
+- update aligned names to accepted names in the APC
+- add best-practice suggested names to all submitted names 
+- add identifiers to taxon concepts (in the APC) or scientific names (in the APC or APNI)
+
+Different functions are used depending on the taxon rank of the aligned name and the taxonomic dataset to which the name was aligned (APC vs APNI).
+
 ```{r, results='show'}
 update_taxonomy_documentation %>%
-  my_kable_styling()
+  my_kable_styling() %>%
+  kableExtra::add_header_above(c(" " = 1, "categories of aligned names processed" = 4, "columns filled in" = 3))
 ```
 
+-* genus updated to APC accepted genus if possible; ** species or infraspecific taxon name
+
+
 # Outputs of APCalign
+
+The following columns are output by the core function `create_taxonomic_update_lookup` and the two component functions `align_taxa` and `update_taxonomy`.
 
 ```{r, results='show'}
 APCalign_outputs_documentation %>%

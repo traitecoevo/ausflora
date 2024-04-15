@@ -53,7 +53,7 @@ utils::globalVariables(
     "family",
     "fuzzy_match_genus",
     "fuzzy_match_genus_APNI",
-    "fuzzy_match_genus_known",
+    "fuzzy_match_genus_synonym",
     "genus",
     "genus_accepted",
     "known",

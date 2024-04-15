@@ -38,6 +38,8 @@ submit an issue at our \href{https://github.com/traitecoevo/APCalign/issues}{Git
 Useful links:
 \itemize{
   \item \url{https://traitecoevo.github.io/APCalign/}
+  \item \url{https://github.com/traitecoevo/APCalign}
+  \item Report bugs at \url{https://github.com/traitecoevo/APCalign/issues}
 }
 
 }

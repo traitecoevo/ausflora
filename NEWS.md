@@ -1,13 +1,9 @@
-# APCalign 0.1.2
+# APCalign 0.1.4
 
-* Updated column names in output of `update_taxonomy`, `align_taxa` and `create_taxonomic_update_lookup`
 
-* Updated vignette
+* Better handling of errors when API/network connection is down for `load_taxonomic_resources` 
 
-* Refined `taxonomic_splits` in `update_taxonomy`, `create_taxonomic_update_lookup`
+* Refined testing for `load_taxonomic_resources` 
 
-* Refinements to testing suite
 
-* Refinements to `native_in_australia`
 
-* Reordered naming matching  algorithm order

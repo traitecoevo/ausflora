@@ -6,7 +6,7 @@
 \title{GBIF Australian Plant Data}
 \format{
 \code{gbif_lite}
-A data frame with 129 rows and 7 columns:
+A tibble with 129 rows and 7 columns:
 \describe{
 \item{species}{The name of the first or species of scientificname}
 \item{infraspecificepithet}{	The name of the lowest or terminal infraspecific epithet of the scientificname}

@@ -8,7 +8,7 @@ coverage](https://codecov.io/gh/traitecoevo/APCalign/branch/master/graph/badge.s
 [![R-CMD-check](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# APCalign <img src="man/figures/APCalign_hex.png" align="right" width="120"/>
+# APCalign <img src="man/figures/APCalign_hex_2.svg" align="right" width="120"/>
 
 ‘APCalign’ uses the [Australian Plant Census
 (APC)](https://biodiversity.org.au/nsl/services/search/taxonomy) and
@@ -54,8 +54,8 @@ create_taxonomic_update_lookup(
 #> 2 Acacia longifolia   Acacia long… Acacia longi… Acacia longif… Acac… species   
 #> 3 Commersonia rosea   Commersonia… Androcalva r… Androcalva ro… Andr… species   
 #> # ℹ 6 more variables: taxonomic_dataset <chr>, taxonomic_status <chr>,
-#> #   scientific_name_authorship <chr>, aligned_reason <chr>,
-#> #   update_reason <chr>, number_of_collapsed_taxa <dbl>
+#> #   scientific_name <chr>, aligned_reason <chr>, update_reason <chr>,
+#> #   number_of_collapsed_taxa <dbl>
 ```
 
 ## Learn more
@@ -64,7 +64,7 @@ Highly recommend looking at our [Getting
 Started](https://traitecoevo.github.io/APCalign/articles/APCalign.html)
 vignette to learn about how to use ‘APCalign’. You can also learn more
 about our [taxa matching
- algorithm](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html)
+algorithm](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html)
 and how [APC/APNI data is
 cached](https://traitecoevo.github.io/APCalign/articles/caching.html)
 behind-the-scenes.

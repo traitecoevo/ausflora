@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_taxonomic_update_lookup.R
 \name{create_taxonomic_update_lookup}
 \alias{create_taxonomic_update_lookup}
-\title{Create a lookup table to help fix the taxonomy for a list of Australian plant species}
+\title{Create a lookup table with the best-possible scientific name match for a list of Australian plant names}
 \usage{
 create_taxonomic_update_lookup(
   taxa,
@@ -13,8 +13,7 @@ create_taxonomic_update_lookup(
   APNI_matches = TRUE,
   imprecise_fuzzy_matches = FALSE,
   identifier = NA_character_,
-  resources = load_taxonomic_resources(stable_or_current_data = stable_or_current_data,
-    version = version),
+  resources = load_taxonomic_resources(),
   output = NULL
 )
 }
@@ -27,7 +26,7 @@ create_taxonomic_update_lookup(
 
 \item{taxonomic_splits}{How to handle one_to_many taxonomic matches.  Default is "return_all".  The other options are "collapse_to_higher_taxon" and "most_likely_species". most_likely_species defaults to the original_name if that name is accepted by the APC; this will be right for certain species subsets, but make errors in other cases, use with caution.}
 
-\item{full}{logical for whether the full lookup table is returned or just the two key columns}
+\item{full}{logical for whether the full lookup table is returned or just key columns}
 
 \item{APNI_matches}{Name matches to the APNI (Australian Plant Names Index) are turned off as a default.}
 
@@ -40,12 +39,7 @@ create_taxonomic_update_lookup(
 \item{output}{file path to save the intermediate output to}
 }
 \value{
-A lookup table containing the accepted and suggested names for each original name input, and additional taxonomic information such as taxon rank, taxonomic status, taxon IDs and genera. See Details.
-}
-\description{
-This function takes a list of Australian plant species that needs to be reconciled with current taxonomy and generates a lookup table to help fix the taxonomy. The lookup table contains the original species names, the aligned species names, and additional taxonomic information such as taxon IDs and genera.
-}
-\details{
+A lookup table containing the accepted and suggested names for each original name input, and additional taxonomic information such as taxon rank, taxonomic status, taxon IDs and genera.
 \itemize{
 \item original_name: the original plant name.
 \item aligned_name: the input plant name that has been aligned to a taxon name in the APC or APNI by the align_taxa function.
@@ -61,13 +55,18 @@ This function takes a list of Australian plant species that needs to be reconcil
 \item update_reason: the explanation of a specific taxon name update (from an aligned name to an accepted or suggested name).
 \item subclass: the subclass of the accepted name.
 \item taxon_distribution: the distribution of the accepted name; only filled in if an APC accepted_name is available.
-\item scientific_name_authorship: the authorship information for the accepted (or known) name; available for both APC and APNI names.
+\item scientific_name_authorship: the authorship information for the accepted (or synonymous) name; available for both APC and APNI names.
 \item taxon_ID: the unique taxon concept identifier for the accepted_name; only filled in if an APC accepted_name is available.
 \item taxon_ID_genus: an identifier for the genus; only filled in if an APC-accepted genus name is available.
 \item scientific_name_ID: an identifier for the nomenclatural (not taxonomic) details of a scientific name; available for both APC and APNI names.
 \item row_number: the row number of a specific original_name in the input.
 \item number_of_collapsed_taxa: when taxonomic_splits == "collapse_to_higher_taxon", the number of possible taxon names that have been collapsed.
 }
+}
+\description{
+This function takes a list of Australian plant names that need to be reconciled with current taxonomy and
+generates a lookup table of the best-possible scientific name match for each input name.
+It uses first the function \code{align_taxa}, then the function \code{update_taxonomy} to achieve the output.
 }
 \examples{
 \donttest{resources <- load_taxonomic_resources()

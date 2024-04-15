@@ -23,7 +23,9 @@ a URL which is the cutting edge version, but this may change at any time without
 The taxonomic resources data loaded into the global environment.
 }
 \description{
-Loads taxonomic resources into the global environment. This function accesses taxonomic data from a dataset using the provided version number or the default version. The loaded data contains two lists: APC and APNI, which contain taxonomic information about plant species in Australia. The function creates several data frames by filtering and selecting data from the loaded lists.
+This function loads two taxonomic datasets for Australia's vascular plants, the APC and APNI, into the global environment.
+It accesses taxonomic data from a dataset using the provided version number or the default version.
+The function creates several data frames by filtering and selecting data from the loaded lists.
 }
 \examples{
 \donttest{load_taxonomic_resources(stable_or_current_data="stable",version="0.0.2.9000")}

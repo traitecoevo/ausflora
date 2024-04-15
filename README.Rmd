@@ -23,7 +23,7 @@ library(APCalign)
 [![R-CMD-check](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# APCalign <img src="man/figures/APCalign_hex.png" align="right" width="120"/>
+# APCalign <img src="man/figures/APCalign_hex_2.svg" align="right" width="120"/>
 
 'APCalign' uses the [Australian Plant Census (APC)](https://biodiversity.org.au/nsl/services/search/taxonomy) and [Australian Plant Name Index](https://biodiversity.org.au/nsl/services/search/names) to align and update Australian plant taxon name strings. 'APCalign' also supplies information about
 the established status (native/introduced) of plant taxa across different states/territories.

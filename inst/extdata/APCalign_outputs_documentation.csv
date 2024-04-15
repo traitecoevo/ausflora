@@ -2,7 +2,7 @@ variable,returned by,description
 original_name,default,The original plant name.
 aligned_name,default,The input plant name that has been aligned to a taxon name in the APC or APNI by the align_taxa function.
 accepted_name,default,The APC-accepted plant name when available.
-suggested_name,default,The suggested plant name to use. Identical to the accepted_name when an accepted_name exists; otherwise the the suggested_name is the aligned_name.
+suggested_name,default,The suggested plant name to use. Identical to the accepted_name when an accepted_name exists; otherwise the suggested_name is the aligned_name or the aligned name with an outdated genus updated.
 genus,default,The genus of the accepted (or suggested) name; only APC-accepted genus names are filled in. 
 family,full,The family of the accepted (or suggested) name; only APC-accepted family names are filled in.
 taxon_rank,default,The taxonomic rank of the suggested (and accepted) name.
@@ -12,10 +12,10 @@ aligned_reason,default,The explanation of a specific taxon name alignment (from 
 update_reason,default,The explanation of a specific taxon name update (from an aligned name to an accepted or suggested name).
 subclass,full,The subclass of the accepted name.
 taxon_distribution,full,The distribution of the accepted name; only filled in if an APC accepted_name is available.
-scientific_name_authorship,default,The authorship information for the accepted (or known) name; available for both APC and APNI names.
+scientific_name_authorship,default,The authorship information for the accepted (or synonymous) name; available for both APC and APNI names.
 taxon_ID,full,The unique taxon concept identifier for the accepted_name; only filled in if an APC accepted_name is available.
 taxon_ID_genus,full,An identifier for the genus; only filled in if an APC-accepted genus name is available.
 scientific_name_ID,full,An identifier for the nomenclatural (not taxonomic) details of a scientific name; available for both APC and APNI names.
 taxonomic_status_aligned,full,The taxonomic status of the aligned name before any taxonomic updates have been applied.
 row_number,full,The row number of a specific original_name in the input.
-number_of_collapsed_taxa,default,The number of possible taxon names that have been collapsed when taxonomic_splits == "collapse_to_higher_taxon".
+number_of_collapsed_taxa,default,"The number of possible taxon names that have been collapsed when taxonomic_splits == ""collapse_to_higher_taxon""."

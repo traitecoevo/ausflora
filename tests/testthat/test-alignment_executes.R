@@ -199,7 +199,7 @@ test_that("handles APNI taxa and genus level IDs",{
   original_name <- c("Acacia sp.", "Dendropanax amplifolius", "Acanthopanax divaricatum", "Eucalyptus sp.")
   taxon_rank <- c("genus", "species", "species", "genus")
   taxonomic_dataset <- c("APC", "APNI", "APNI", "APC")
-  genus_updated <- c("Acacia", NA, NA, "Eucalyptus")
+  genus_updated <- c("Acacia", "Dendropanax", "Acanthopanax", "Eucalyptus")
   
   out1 <- 
     align_taxa(original_name, resources = resources)

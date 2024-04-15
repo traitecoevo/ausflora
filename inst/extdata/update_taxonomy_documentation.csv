@@ -1,14 +1,11 @@
-﻿function name,categories of aligned names processed:,,,,columns filled in,,
-,taxonomic dataset,taxon rank,updates to aligned name,format of `suggested_name`,accepted name (& taxon_ID),genus (& taxon_ID_genus),scientific_name_ID
+﻿,categories of aligned names processed:,,,,columns filled in,,
+function name,taxonomic dataset,taxon rank,updates to aligned name,format of `suggested_name`,accepted name (& taxon_ID),genus (& taxon_ID_genus),scientific_name_ID
 update_taxonomy_APC_genus,APC,genus,to APC accepted genus,`genus sp. [notes]` *,no,yes,no
 update_taxonomy_APNI_genus,APNI,genus,none,`genus sp. [notes]`,no,no,no
 update_taxonomy_APC_family,APC,family,none,`family sp. [notes]`,no,no,no
 update_taxonomy_APC_species_and_infraspecific_taxa,APC,species & infraspecific,,APC accepted species** name,yes,yes,yes
-"taxonomic_splits = ""most_likely_species""",,,to APC accepted taxon concept,most likely APC accepted species** name [alternative possible names],yes,yes,yes
-"taxonomic_splits = ""return_all""",,,to APC accepted taxon concept,all possible APC accepted species** name (extra rows added),yes,yes,yes
-"taxonomic_splits = ""collapse_to_higher_taxon""",,,collapsed to APC accepted genus,`genus sp.` [collapsed names],no,yes,no
+" -- taxonomic_splits = ""most_likely_species""",,,to APC accepted taxon concept,most likely APC accepted species** name [alternative possible names],yes,yes,yes
+" -- taxonomic_splits = ""return_all""",,,to APC accepted taxon concept,all possible APC accepted species** name (extra rows added),yes,yes,yes
+" -- taxonomic_splits = ""collapse_to_higher_taxon""",,,collapsed to APC accepted genus,`genus sp.` [collapsed names],no,yes,no
 update_taxonomy_APNI_species_and_infraspecific_taxa,APNI,species & infraspecific,none to species name; genus to APC accepted genus if possible,APNI listed species** name*,no,sometimes,yes
-not required,(not aligned),(not aligned),none,original name,no,no,no
-,,,,,,,
-* genus updated to APC accepted genus if possible,,,,,,,
-** species or infraspecific taxon name,,,,,,,
+(names not aligned),(not aligned),(not aligned),none,original name,no,no,no

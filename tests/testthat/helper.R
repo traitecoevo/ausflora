@@ -1,5 +1,3 @@
-library(stringr)
-
 # hack to enable faster load times for tests
 if(exists("resources", envir = globalenv())) {
   resources <- get("resources", envir = globalenv())

@@ -1,6 +1,7 @@
-#' Calculate Australian plant state-level diversity for native, introduced, and more complicated species origins
+#' For Australian states and territories, use data from the APC to calculate state-level diversity for native, introduced, and more complicated species origins
 #'
-#' This function calculates state-level diversity for native, introduced, and more complicated species origins based on the geographic data available in the current Australian Plant Census.
+#' This function calculates state-level diversity for native, introduced, and more complicated species origins 
+#' based on the geographic data available in the APC.
 #'
 #' @family diversity methods
 #' @param state A character string indicating the Australian state or territory to calculate the diversity for. Possible values are "NSW", "NT", "Qld", "WA", "ChI", "SA", "Vic", "Tas", "ACT", "NI", "LHI", "MI", "HI", "MDI", "CoI", "CSI", and "AR".
@@ -16,7 +17,7 @@
 #' @examples
 #'  \donttest{state_diversity_counts(state = "NSW")}
 state_diversity_counts <- function(state,
-                                   resources = load_taxonomic_resources(version = default_version())) {
+                                   resources = load_taxonomic_resources()) {
   valid_inputs <- c(
     "NSW",
     "NT",

@@ -1,6 +1,6 @@
 Package: APCalign
 Title: Resolving Plant Taxon Names Using the Australian Plant Census
-Version: 0.1.2
+Version: 0.1.4
 Authors@R: c(
   person(given = "Daniel", family = "Falster", role = c("aut", "cre", "cph"), email = "daniel.falster@unsw.edu.au", comment = c(ORCID = "0000-0002-9814-092X")),
   person(given = "Elizabeth", family = "Wenk", role = c("aut", "ctb"), email = "e.wenk@unsw.edu.au", comment = c(ORCID = "0000-0001-5640-5910")),
@@ -21,13 +21,15 @@ Imports:
     forcats,
     tibble,
     dplyr,
-    contentid,
     stringr,
     stringi,
-    arrow,
     crayon,
     parallel,
-    gh
+    httr,
+    jsonlite,
+    curl,
+    arrow,
+    rlang
 Suggests:
     janitor,
     tidyr,
@@ -37,8 +39,10 @@ Suggests:
     kableExtra,
     here,
     testthat (>= 3.0.0)
+Remotes: apache/arrow/r
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://traitecoevo.github.io/APCalign/
+URL: https://traitecoevo.github.io/APCalign/, https://github.com/traitecoevo/APCalign
+BugReports: https://github.com/traitecoevo/APCalign/issues

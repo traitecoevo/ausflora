@@ -1,9 +1,8 @@
-#' Check if a vector of species are native anywhere in Australia
+#' For a vector of taxon names in to the APC, check if the species are native anywhere in Australia
 #'
-#' This function checks if the given species is native anywhere in Australia according to the loaded version of the Australian Plant Census (APC).
-#' It creates a lookup table from taxonomic resources, and checks if the species
-#' is listed as native in that table. Note that this will not detect within Australia invasions,
-#' e.g. if a species is from Western Australia and is invasive on the east coast.  And recent invasions are unlikely to be documented yet in APC. 
+#' This function checks if the given species is native anywhere in Australia according to the APC. 
+#' Note that this will not detect within-Australia introductions, e.g. if a species is from Western Australia and is invasive on the east coast.
+#' And recent invasions are unlikely to be documented yet in APC. 
 #' For the complete matrix of species by states that also represents within-Australia invasions,
 #' use \link{create_species_state_origin_matrix}.  For spelling checks and taxonomy updates please see \link{create_taxonomic_update_lookup}.
 #'

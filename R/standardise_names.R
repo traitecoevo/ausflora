@@ -1,13 +1,10 @@
 
-#' Standardise Taxon Names
+#' Standardises taxon names by performing a series of text substitutions to remove common inconsistencies in taxonomic nomenclature.
 #'
-#' This function standardises taxon names by performing a series of text 
-#' substitutions to remove common inconsistencies in taxonomic nomenclature.
-#' The function takes a character vector of taxon names as input and returns a
-#' character vector of taxon names using standardised taxonomic syntax as output. In particular it standardises
-#' the abbreviations used to document infraspecific taxon ranks (subsp., var., f.),
-#' as people use many variants of these terms. It also standardises or removes a few additional filler
-#' words used within taxon names (affinis becomes aff.; s.l. and s.s. are removed).
+#' The function takes a character vector of taxon names as input and 
+#' returns a character vector of taxon names using standardised taxonomic syntax as output. 
+#' In particular it standardises taxon rank abbreviations and qualifiers (subsp., var., f.), as people use many variants of these terms. 
+#' It also standardises or removes a few additional filler words used within taxon names (affinis becomes aff.; s.l. and s.s. are removed).
 #'
 #' @param taxon_names A character vector of taxon names that need to be standardised.
 #'
@@ -98,3 +95,29 @@ standardise_names <- function(taxon_names) {
     stringr::str_squish()
 }
 
+#' Extract Genus
+#' 
+#' This function extracts the genus component of a scientific name. 
+#' It identifies if the genus is/is not a hybrid. For a hybrid genus,
+#' the first two words of the taxon name are extracted (e.g. "x Cynochloris"),
+#' while for a non-hybrid genus just the first word is extracted (e.g. "Banksia").
+#'
+#' @param taxon_name 
+#'
+#' @return The genus for a scientific name.
+#'
+#' @examples
+#' genus = extract_genus(stripped_name)
+#' 
+#' @keywords internal
+#' @noRd
+
+extract_genus <- function(taxon_name) {
+  genus <- 
+    ifelse(
+      stringr::word(taxon_name, 1) %>% stringr::str_to_lower() == "x",
+      paste(stringr::word(taxon_name, 1) %>% stringr::str_to_lower(), stringr::word(taxon_name, 2) %>% stringr::str_to_sentence()),
+      stringr::word(taxon_name, 1) %>% stringr::str_to_sentence()
+    )
+  genus
+}
