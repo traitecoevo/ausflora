@@ -2,8 +2,8 @@
 % Please edit documentation in R/APCalign-package.R
 \docType{package}
 \name{APCalign}
-\alias{APCalign}
 \alias{APCalign-package}
+\alias{APCalign}
 \title{Standardising Taxonomic Names in Australian Plants}
 \description{
 The process of standardising taxon names is necessary when working with
