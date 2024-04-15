@@ -27,15 +27,8 @@ load_taxonomic_resources <-
     message("Loading resources...", appendLF = FALSE)
     on.exit(message("...done"))
     
-<<<<<<< HEAD
-    taxonomic_resources <-
-      dataset_access_function(version = version,
-                              path = NULL,
-                              type = stable_or_current_data)
-   if (is.null(taxonomic_resources)) return(NULL)
-     names(taxonomic_resources) <- c("APC", "APNI")
-=======
-    taxonomic_resources <- dataset_access_function(
+
+   taxonomic_resources <- dataset_access_function(
       version = version,
       path = tools::R_user_dir("APCalign"),
       type = stable_or_current_data
@@ -47,7 +40,6 @@ load_taxonomic_resources <-
     
     # Give list names
     names(taxonomic_resources) <- c("APC", "APNI")
->>>>>>> origin/master
     
     ## todo :review this, why zzz
     ### Note: Use `zzzz zzzz` because the fuzzy matching algorithm can't handles NA's
@@ -427,21 +419,7 @@ dataset_get <- function(version = default_version(),
       version,
       "/apni.parquet"
     )
-<<<<<<< HEAD
-    
-  apni_hash <- tryCatch({
-        contentid::register(url)
-  }, error = function(e) {
-   message("The server might be down.")
-    return(NULL)
-  })
-  
-  apni_file <- contentid::resolve(apni_hash, store = TRUE, path = path)
-  
-  #only getting APNI names that are not in APC
-  APNI <- arrow::open_dataset(apni_file) %>% dplyr::filter(!.data$canonicalName %in% APC$canonicalName) %>% dplyr::collect()
-=======
->>>>>>> origin/master
+
   
   
   download_and_read_parquet <- function(url, path_to_file) {
