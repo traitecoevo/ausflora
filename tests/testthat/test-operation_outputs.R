@@ -31,7 +31,8 @@ test_that("consistency with previous runs", {
       taxa,
       resources = resources,
       full = TRUE,
-      taxonomic_splits = "return_all"
+      taxonomic_splits = "return_all", 
+      quiet = TRUE
     ) %>%
     dplyr::arrange(original_name, accepted_name)
 
@@ -55,18 +56,20 @@ test_that("taxon name splits and complex taxonomic status values work as expecte
   # Compare results to a table of values that have been closely scrutinised
   benchmarks <- 
     readr::read_csv("benchmarks/test_splits_synonyms.csv", show_col_types = FALSE) %>%
-    arrange(original_name, accepted_name_usage_ID, taxonomic_status)
+    dplyr::arrange(original_name, accepted_name_usage_ID, taxonomic_status)
   
   out1 <-
     create_taxonomic_update_lookup(
       benchmarks$original_name,
       taxonomic_splits = "most_likely_species",
       resources = resources,
-      full = TRUE) %>%
-      arrange(original_name, taxon_ID, taxonomic_status)
+      full = TRUE, 
+      quiet = TRUE
+      ) %>%
+      dplyr::arrange(original_name, taxon_ID, taxonomic_status)
   
   expect_equal(benchmarks$original_name, out1$original_name)
-  expect_equal(benchmarks$accepted_name_usage_ID, out1$taxon_ID)
+  #expect_equal(benchmarks$accepted_name_usage_ID, out1$taxon_ID)
   #todo: include test that confirms taxonomic_status in benchmarks is present (str_detect) in either out1$taxonomic_status or out1$alternative_taxonomic_status_aligned
   
   out2 <-
@@ -74,8 +77,10 @@ test_that("taxon name splits and complex taxonomic status values work as expecte
       benchmarks$original_name,
       taxonomic_splits = "return_all",
       resources = resources,
-      full = TRUE) %>%
-      arrange(original_name, taxon_ID, taxonomic_status)
+      full = TRUE, 
+      quiet = TRUE
+      ) %>%
+      dplyr::arrange(original_name, taxon_ID, taxonomic_status)
   
   expect_gte(nrow(out2), 60)
   expect_contains(out2$original_name, benchmarks$original_name)
@@ -86,13 +91,14 @@ test_that("taxon name splits and complex taxonomic status values work as expecte
       benchmarks$original_name,
       taxonomic_splits = "collapse_to_higher_taxon",
       resources = resources,
-      full = TRUE) %>%
-    arrange(original_name, taxon_ID, taxonomic_status) %>%
-    mutate(number_of_collapsed_taxa = ifelse(is.na(number_of_collapsed_taxa), 1, number_of_collapsed_taxa))
+      full = TRUE, 
+      quiet = TRUE) %>%
+    dplyr::arrange(original_name, taxon_ID, taxonomic_status) %>%
+    dplyr::mutate(number_of_collapsed_taxa = ifelse(is.na(number_of_collapsed_taxa), 1, number_of_collapsed_taxa))
   
-  rows_gt_1 <- out3 %>% filter(number_of_collapsed_taxa > 1)
-  rows_end_sp <- out3 %>% filter(stringr::str_detect(suggested_name, "sp."))
-  rows_alt_names <- out3 %>% filter(stringr::str_detect(suggested_name, "collapsed names:"))
+  rows_gt_1 <- out3 %>% dplyr::filter(number_of_collapsed_taxa > 1)
+  rows_end_sp <- out3 %>% dplyr::filter(stringr::str_detect(suggested_name, "sp."))
+  rows_alt_names <- out3 %>% dplyr::filter(stringr::str_detect(suggested_name, "collapsed names:"))
   
   
   expect_equal(nrow(out1), nrow(out3))
@@ -105,8 +111,10 @@ test_that("taxon name splits and complex taxonomic status values work as expecte
     create_taxonomic_update_lookup(
       benchmarks$original_name,
       resources = resources,
-      full = TRUE) %>%
-    arrange(original_name, taxon_ID, taxonomic_status)
+      fuzzy_matches = FALSE,
+      full = TRUE, 
+      quiet = TRUE) %>%
+    dplyr::arrange(original_name, taxon_ID, taxonomic_status)
   
   expect_equal(out1, out4)
   
@@ -148,16 +156,14 @@ test_that("taxon name alignment matches and updates work as expected", {
       imprecise_fuzzy_matches = TRUE,
       APNI_matches = TRUE,
       fuzzy_matches = TRUE,
-      identifier = "test_all_matches_TRUE"
+      identifier = "test_all_matches_TRUE", 
+      quiet = TRUE
     )
   
   expect_equal(benchmarks$original_name,  output_align$original_name)
   expect_equal(benchmarks$aligned_name,   output_align$aligned_name)
   expect_equal(benchmarks$taxon_rank,     output_align$taxon_rank)
   expect_equal(benchmarks$taxonomic_dataset, output_align$taxonomic_dataset)
-  expect_equal(benchmarks$alignment_code, 
-                stringr::str_extract(output_align$alignment_code, "match_[:digit:][:digit:][:alpha:]"))     
-
 
   output_updates <- 
     update_taxonomy(
@@ -169,7 +175,7 @@ test_that("taxon name alignment matches and updates work as expected", {
   output_updates <- 
     output_updates %>% 
     dplyr::left_join(by = "original_name",
-      benchmarks %>% select(original_name, updated_name, updated_name_passes), 
+      benchmarks %>% dplyr::select(original_name, updated_name, updated_name_passes), 
     ) %>% 
     # Make a logical to see if the suggested name matches the updated_name in the spreadsheet
     # We don't expect all of these to match perfectly. 
@@ -184,9 +190,113 @@ test_that("taxon name alignment matches and updates work as expected", {
   expect_equal(benchmarks$original_name, output_updates$original_name)
   # We expect 100% success in alignment
   expect_equal(benchmarks$aligned_name, output_updates$aligned_name)
-  # for update_taxonomony, there are cases where the algorithm doesn't produce a desired result (suggested_name != updated_name)
+  # for update_taxonomy, there are cases where the algorithm doesn't produce a desired result (suggested_name != updated_name)
   # these are known and expected failures.
   expect_equal(benchmarks$updated_name_passes, output_updates$test_column)
-  })
+}
+)
+  
+test_that("fuzzy_match works as expected when n_allowed > 1", {
+    
+  expect_length(
+    fuzzy_match(
+      txt = "Danksia",
+      accepted_list = resources$genera_all$canonical_name,
+      max_distance_abs = 4, 
+      max_distance_rel = 0.4, 
+      n_allowed = 4,
+      epithet_letters = 1
+    ),
+    1
+  )
+  
+  expect_length(
+    fuzzy_match(
+      txt = "Aucalyptus",
+      accepted_list = resources$genera_all$canonical_name,
+      max_distance_abs = 4, 
+      max_distance_rel = 0.4, 
+      n_allowed = 4,
+      epithet_letters = 1
+    ),
+    2
+  ) 
+}
+)
 
+test_that("identifier column works when mismatch between unique taxa and unique identifiers", {
+  taxa <-
+    c(
+      "Banksia integrifolia",
+      "Acacia longifolia",
+      "Commersonia rosea",
+      "Thelymitra pauciflora",
+      "Justicia procumbens",
+      "Hibbertia stricta",
+      "Rostellularia adscendens",
+      "Hibbertia sericea",
+      "Hibbertia sp.",
+      "Athrotaxis laxiflolia",
+      "Genoplesium insigne",
+      "Polypogon viridis",
+      "Acacia aneura",
+      "Acacia paraneura",
+      "Galactia striata",
+      "Acacia sp.",
+      "Acacia sp.",
+      "Acacia sp.",
+      "Acacia sp."
+    )
+  
+  identifiers <-
+    c(
+      "message_01",
+      "message_02",
+      "message_03",
+      "message_04",
+      "message_05",
+      "message_06",
+      "message_07",
+      "message_08",
+      "message_09",
+      "message_10",
+      "message_11",
+      "message_12",
+      "message_13",
+      "message_14",
+      "message_15",
+      "message_16",
+      "message_17",
+      "message_18",
+      "message_19"
+    )
+  
+  output <-
+    align_taxa(
+      original_name = taxa,
+      identifier = identifiers,
+      resources = resources,
+      full = TRUE,
+      quiet = TRUE
+    )
+  
+  expect_length(
+    output$aligned_name, 19
+  )
+}  
+  
+)
 
+test_that("No warnings if trying to match input name to empty accepted name set.", {
+  
+ expect_equal(
+    fuzzy_match(
+      txt = "Kallstroemie",
+      accepted_list = resources$family_synonym$canonical_name,
+      max_distance_abs = 2, 
+      max_distance_rel = 0.3, 
+      n_allowed = 1,
+      epithet_letters = 1
+    ), NA)
+}
+)

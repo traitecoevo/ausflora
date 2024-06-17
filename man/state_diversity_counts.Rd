@@ -2,22 +2,31 @@
 % Please edit documentation in R/state_diversity_counts.R
 \name{state_diversity_counts}
 \alias{state_diversity_counts}
-\title{For Australian states and territories, use data from the APC to calculate state-level diversity for native, introduced, and more complicated species origins}
+\title{State- and territory-level diversity}
 \usage{
 state_diversity_counts(state, resources = load_taxonomic_resources())
 }
 \arguments{
-\item{state}{A character string indicating the Australian state or territory to calculate the diversity for. Possible values are "NSW", "NT", "Qld", "WA", "ChI", "SA", "Vic", "Tas", "ACT", "NI", "LHI", "MI", "HI", "MDI", "CoI", "CSI", and "AR".}
+\item{state}{A character string indicating the Australian state or
+territory to calculate the diversity for. Possible values are "NSW", "NT",
+"Qld", "WA", "ChI", "SA", "Vic", "Tas", "ACT", "NI", "LHI", "MI", "HI",
+"MDI", "CoI", "CSI", and "AR".}
 
-\item{resources}{the taxonomic resources required to make the summary statistics.  loading this can be slow, so call load_taxonomic_resources separately to greatly speed this function up and pass the resources in.}
+\item{resources}{the taxonomic resources required to make the summary
+statistics.  loading this can be slow, so call load_taxonomic_resources
+separately to greatly speed this function up and pass the resources in.}
 }
 \value{
-A tibble of diversity counts for the specified state or territory, including native, introduced, and more complicated species origins.
-The tibble has three columns: "origin" indicating the origin of the species, "state" indicating the Australian state or territory, and "num_species" indicating the number of species for that origin and state.
+A tibble of diversity counts for the specified state or territory,
+including native, introduced, and more complicated species origins.
+The tibble has three columns: "origin" indicating the origin of the
+species, "state" indicating the Australian state or territory, and
+"num_species" indicating the number of species for that origin and state.
 }
 \description{
-This function calculates state-level diversity for native, introduced, and more complicated species origins
-based on the geographic data available in the APC.
+For Australian states and territories, use geographic distribution data from
+the APC to calculate state-level diversity for native, introduced,
+and more complicated species origins
 }
 \examples{
  \donttest{state_diversity_counts(state = "NSW")}

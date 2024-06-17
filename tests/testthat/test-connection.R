@@ -1,4 +1,6 @@
 test_that("Complains when network is down", {
+  skip_if_offline(host = "api.github.com")
+
   Sys.setenv("NETWORK_UP" = FALSE)
   expect_message(default_version())
   expect_message(dataset_access_function())

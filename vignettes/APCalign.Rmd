@@ -9,7 +9,7 @@ vignette: >
 
 
 
-When working with biodiversity data, it is important to verify  taxonomic names with an authoritative list and correct any out-of-date names. The 'APCalign' package simplifies this process by:
+When working with biodiversity data, it is important to verify  taxonomic names with an authoritative list and correct any out-of-date names. The `APCalign` package simplifies this process by:
 
 -   Accessing up-to-date taxonomic information from the [Australian Plant Census](https://biodiversity.org.au/nsl/services/search/taxonomy) and the [Australia Plant Name Index](https://biodiversity.org.au/nsl/services/search/names).
 -   Aligning authoritative names to your taxonomic names using our [fuzzy matching algorithm](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html)
@@ -17,18 +17,13 @@ When working with biodiversity data, it is important to verify  taxonomic names 
 
 ## Installation
 
-'APCalign' is currently not on CRAN. You can install its current developmental version using
-
-
-
 ```r
-# install.packages("remotes")
+install.packages("remotes")
 remotes::install_github("traitecoevo/APCalign")
-
 library(APCalign)
 ```
 
-To demonstrate how to use 'APCalign', we will use an example dataset `gbif_lite` which is documented in `?gbif_lite`
+To demonstrate how to use `APCalign`, we will use an example dataset `gbif_lite` which is documented in `?gbif_lite`
 
 
 
@@ -52,14 +47,14 @@ gbif_lite |> print(n = 6)
 
 ## Retrieve taxonomic resources
 
-The first step is to retrieve the entire APC and APNI name databases and store them locally as taxonomic resources. We achieve this using `load_taxonomic_resources()`.
+The first step is to retrieve the entire APC and APNI name databases and store them locally as taxonomic resources. We achieve this using `load_taxonomic_resources()`.  The resources are compressed as parquet files to speed download and local loading. 
 
 There are two versions of the databases that you can retrieve with the `stable_or_current_data` argument. Calling:
 
 -   `stable` will retrieve the most recent, archived version of the databases from our [GitHub releases](https://github.com/traitecoevo/APCalign/releases). This is set as the default option.
 -   `current` will retrieve the up-to-date databases directly from the APC and APNI website.
 
-Note that the databases are quite large so the initial retrieval of `stable` versions will take a few minutes. Once the taxonomic resources have been stored locally, subsequent retrievals will take less time. Retrieving `current` resources will always take longer since it is accessing the latest information from the website. Check out our [Resource Caching](https://traitecoevo.github.io/APCalign/articles/caching.html) article to learn more about how the APC and APNIC databases are accessed, stored and retrieved.
+Note that the databases are reasonably large so the initial retrieval of the core data will take a few minutes. Once the taxonomic resources have been stored locally, subsequent retrievals will take less time. Retrieving `current` resources will always take longer since it is accessing the latest information from the website in an uncompressed format. 
 
 
 ```r
@@ -215,7 +210,7 @@ updated_gbif_names |>
 The function `align_taxa` will:
 
 1.  Clean up your taxonomic names
-    - The functions `standardise_names`, `strip_names` and `strip_names_2` standardise infraspecific taxon designations and clean up punctuation and whitespaces  
+    - The functions `standardise_names`, `strip_names` and `strip_names_extra` standardise infraspecific taxon designations and clean up punctuation and whitespaces  
 
 2.  Find best alignment with APC or APNI to your taxonomic name using our the function [match_taxa](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html)  
     - A taxonomic name flows through a progression of [50 match algorithms](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html) until it is able to be aligned to a name on either the APC or APNI list.  

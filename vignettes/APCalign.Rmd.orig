@@ -160,7 +160,7 @@ updated_gbif_names |>
 The function `align_taxa` will:
 
 1.  Clean up your taxonomic names
-    - The functions `standardise_names`, `strip_names` and `strip_names_2` standardise infraspecific taxon designations and clean up punctuation and whitespaces  
+    - The functions `standardise_names`, `strip_names` and `strip_names_extra` standardise infraspecific taxon designations and clean up punctuation and whitespaces  
 
 2.  Find best alignment with APC or APNI to your taxonomic name using our the function [match_taxa](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html)  
     - A taxonomic name flows through a progression of [50 match algorithms](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html) until it is able to be aligned to a name on either the APC or APNI list.  

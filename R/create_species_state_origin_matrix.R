@@ -1,16 +1,22 @@
-#' Use the taxon distribution data from the APC to determine state level native and introduced origin status
+#' @title State level native and introduced origin status
+#' 
+#' @description
+#' This function uses the taxon distribution data from the APC to determine
+#' state level native and introduced origin status.
 #'
 #' This function processes the geographic data available in the APC and 
 #' returns state level native, introduced and more complicated origins status for all taxa.
 #'
 #'
 #' @family diversity methods
-#' @param resources the taxonomic resources required to make the summary statistics.  Loading this can be slow, so call load_taxonomic_resources separately to greatly speed this function up and pass the resources in.
+#' @param resources the taxonomic resources required to make the summary statistics.
+#'   Loading this can be slow, so call load_taxonomic_resources separately to greatly
+#'   speed this function up and pass the resources in.
 #'
-#' @return A tibble with columns representing each state and rows representing each species. The values in each cell represent the origin of the species in that state.
+#' @return A tibble with columns representing each state and rows representing each
+#'   species. The values in each cell represent the origin of the species in that state.
 #'
-#' @import dplyr
-#' @import stringr
+#' 
 #' @export
 #'
 #' @seealso \code{\link{load_taxonomic_resources}}
@@ -44,13 +50,13 @@ separate_states <- function(data) {
 #' @noRd
 identify_places <- function(sep_state_data) {
   all_codes <- unique(stringr::str_trim(unlist(sep_state_data)))
-  unique(stringr::word(all_codes[!is.na(all_codes)], 1, 1))
+  unique(word(all_codes[!is.na(all_codes)], 1, 1))
 }
 
 #' @noRd
 create_species_df <- function(apc_places, apc_species) {
   species_df <- dplyr::tibble(species = apc_species$canonical_name)
-  for (i in 1:length(apc_places)) {
+  for (i in seq_along(apc_places)) {
     species_df <- dplyr::bind_cols(species_df, NA, .name_repair = "minimal")
   }
   names(species_df) <- c("species", apc_places)
@@ -76,7 +82,7 @@ state_parse_and_add_column <- function(species_df, state, apc_species) {
 
 #' @noRd
 parse_states <- function(species_df, apc_places, apc_species) {
-  for (i in 1:length(apc_places)) {
+  for (i in seq_along(apc_places)) {
     species_df <- state_parse_and_add_column(species_df, apc_places[i], apc_species)
   }
   return(species_df)

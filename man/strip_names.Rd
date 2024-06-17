@@ -2,7 +2,7 @@
 % Please edit documentation in R/strip_names.R
 \name{strip_names}
 \alias{strip_names}
-\title{Strip taxonomic names of taxon rank abbreviations and qualifiers and special characters}
+\title{Strip taxon names}
 \usage{
 strip_names(taxon_names)
 }
@@ -10,13 +10,23 @@ strip_names(taxon_names)
 \item{taxon_names}{A character vector of taxonomic names to be stripped.}
 }
 \value{
-A character vector of stripped taxonomic names, with subtaxa designations, special
-characters, and extra whitespace removed, and all letters converted to lowercase.
+A character vector of stripped taxonomic names,
+with subtaxa designations, special characters, and extra whitespace
+removed, and all letters converted to lowercase.
 }
 \description{
-Given a vector of taxonomic names, this function removes subtaxa designations ("subsp.", "var.", "f.", and "ser"),
-special characters (e.g., "-", ".", "(", ")", "?"), and extra whitespace. The resulting vector
-of names is also converted to lowercase.
+Strip taxonomic names of taxon rank abbreviations and qualifiers
+and special characters
+}
+\details{
+Given a vector of taxonomic names, this function removes:
+\itemize{
+\item subtaxa designations ("subsp.", "var.", "f.", and "ser")
+\item special characters (e.g., "-", ".", "(", ")", "?")
+\item extra whitespace
+}
+
+The resulting vector of names is also converted to lowercase.
 }
 \examples{
 strip_names(c("Abies lasiocarpa subsp. lasiocarpa",

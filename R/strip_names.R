@@ -1,13 +1,22 @@
-#' Strip taxonomic names of taxon rank abbreviations and qualifiers and special characters
+#' @title Strip taxon names
+#' 
+#' @description
+#' Strip taxonomic names of taxon rank abbreviations and qualifiers 
+#' and special characters
 #'
-#' Given a vector of taxonomic names, this function removes subtaxa designations ("subsp.", "var.", "f.", and "ser"),
-#' special characters (e.g., "-", ".", "(", ")", "?"), and extra whitespace. The resulting vector
-#' of names is also converted to lowercase.
+#' @details
+#' Given a vector of taxonomic names, this function removes:
+#' -  subtaxa designations ("subsp.", "var.", "f.", and "ser")
+#' -  special characters (e.g., "-", ".", "(", ")", "?")
+#' -  extra whitespace
+#' 
+#'  The resulting vector of names is also converted to lowercase.
 #'
 #' @param taxon_names A character vector of taxonomic names to be stripped.
 #'
-#' @return A character vector of stripped taxonomic names, with subtaxa designations, special
-#' characters, and extra whitespace removed, and all letters converted to lowercase.
+#' @return A character vector of stripped taxonomic names,
+#'  with subtaxa designations, special characters, and extra whitespace
+#'  removed, and all letters converted to lowercase.
 #'
 #'
 #' @examples
@@ -17,60 +26,64 @@
 #'
 #' @export
 strip_names <- function(taxon_names) {
+  
+  f <- function(x, find, replace) {
+    gsub(find, replace, x, perl = TRUE)
+  }
+  
   taxon_names %>%
-    stringr::str_replace_all("\\.", "") %>%
-    stringr::str_replace_all("\\ \\)", "") %>%
-    stringr::str_replace_all("\\(\\ ", "") %>%
+    f("\\.", "") %>%
+    f("\\ \\)", "") %>%
+    f("\\(\\ ", "") %>%
     stringr::str_replace_all("[:punct:]", " ") %>%
     stringr::str_replace_all("\\u2215", " ") %>%
-    stringr::str_replace_all("\\,", "") %>%
-    stringr::str_replace_all("\\=", " ") %>%
-    stringr::str_replace_all("  ", " ") %>%
-    stringr::str_replace_all(" subsp ", " ") %>%
-    stringr::str_replace_all(" var ", " ") %>%   
-    stringr::str_replace_all(" ser ", " ") %>%
-    stringr::str_replace_all(" f ", " ") %>%
+    f("\\,", "") %>%
+    f("\\=", " ") %>%
+    f("  ", " ") %>%
+    f(" subsp ", " ") %>%
+    f(" var ", " ") %>%   
+    f(" ser ", " ") %>%
+    f(" f ", " ") %>%
     stringr::str_squish() %>%
-    tolower()
+    stringr::str_to_lower()
 }
 
-#' Strip taxonomic names of taxon rank abbreviations and qualifiers, filler words and special characters
-#'
-#' Given a vector of taxonomic names, this function removes subtaxa designations ("subsp.", "var.", "f.", and "ser"),
-#' additional filler words and characters (" x " for hybrid taxa, "sp."), 
-#' special characters (e.g., "-", ".", "(", ")", "?"), and extra whitespace. The resulting vector
-#' of names is also converted to lowercase.
+#' @title Strip taxon names, extra
+#' 
+#' @description
+#' Strip taxonomic names of `sp.` and hybrid symbols. This function assumes 
+#' that a character function has already been run through `strip_names`.
+#' 
+#' @details
+#' Given a vector of taxonomic names, this function removes additional filler
+#' words (" x " for hybrid taxa, "sp.") not removed by the function 
+#' `strip_names`
 #'
 #' @param taxon_names A character vector of taxonomic names to be stripped.
 #'
-#' @return A character vector of stripped taxonomic names, with subtaxa designations, special
-#' characters, additional filler words and extra whitespace removed, and all letters converted to lowercase.
+#' @return A character vector of stripped taxonomic names, 
+#'  with `sp.` and hybrid symbols removed.
 #'
 #'
 #' @examples
-#' strip_names_2(c("Abies lasiocarpa subsp. lasiocarpa",
+#' strip_names_extra(c("Abies lasiocarpa subsp. lasiocarpa",
 #'               "Quercus kelloggii",
 #'               "Pinus contorta var. latifolia",
 #'               "Acacia sp.",
 #'               "Lepidium sp. Tanguin Hill (K.R.Newbey 10501)"))
 #'
 #' @export
-strip_names_2 <- function(taxon_names) {
+strip_names_extra <- function(taxon_names) {
+  
+  f <- function(x, find, replace) {
+    gsub(find, replace, x, perl = TRUE)
+  }
+  
   taxon_names %>%
-    stringr::str_replace_all("\\.", "") %>%
-    stringr::str_replace_all("[:punct:]", " ") %>%
-    stringr::str_replace_all("\\u2215", " ") %>%
-    stringr::str_replace_all(" subsp ", " ") %>%
-    stringr::str_replace_all(" var ", " ") %>%   
-    stringr::str_replace_all(" ser ", " ") %>%
-    stringr::str_replace_all(" f ", " ") %>%
-    stringr::str_replace_all(" species ", " ") %>%
-    stringr::str_replace_all(" x ", " ") %>%
-    stringr::str_replace_all(" sp ", " ") %>%
-    stringr::str_replace_all(" sp1", " 1") %>%
-    stringr::str_replace_all(" sp2", " 2") %>%
-    stringr::str_replace_all("\\=", " ") %>%
-    stringr::str_replace_all("  ", " ") %>%
-    stringr::str_squish() %>%
-    tolower()
+    f(" species ", " ") %>%
+    f(" x ", " ") %>%
+    f(" sp ", " ") %>%
+    f(" sp1", " 1") %>%
+    f(" sp2", " 2") %>%
+    stringr::str_squish() 
 }

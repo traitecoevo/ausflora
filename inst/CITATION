@@ -1,0 +1,18 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "APCalign: an R package workflow and app for aligning and updating flora names to the Australian Plant Census",
+  journal = "Australian Journal of Botany",
+  author   = c(
+    person(given = "Elizabeth", family = "Wenk", role = c("aut", "ctb"), email = "e.wenk@unsw.edu.au", comment = c(ORCID = "0000-0001-5640-5910")),
+    person(given = "Will", family = "Cornwell", role = c("aut", "ctb"), email = "w.cornwell@unsw.edu.au", comment = c(ORCID = "0000-0003-4080-4073")),
+    person(given = "Ann", family=  "Fuchs", role = c("aut"), email = "anne.fuchs@dcceew.gov.au", comment = c(ORCID = "0000-0001-5737-8803")),
+    person(given = "Fonti", family = "Kar", role = c("aut", "ctb"), email = "f.kar@unsw.edu.au", comment = c(ORCID = "0000-0002-2760-3974")),
+    person(given = "Anna", family=  "Monro", role = c("aut"), email = "anna.monro@dcceew.gov.au", comment = c(ORCID = "0000-0001-9031-2670")),
+    person(given = "Herve", family=  "Sauquet", role = c("aut"), email = "herve.sauquet@botanicgardens.nsw.gov.au", comment = c(ORCID = "0000-0001-8305-3236")),
+    person(given = "Ruby", family=  "Stephens", role = c("aut"), email = "stephenseruby@gmail.com", comment = c(ORCID = "0000-0002-3767-2690")),
+    person(given = "Daniel", family = "Falster", role = c("aut", "cre", "cph"), email = "daniel.falster@unsw.edu.au", comment = c(ORCID = "0000-0002-9814-092X"))
+    ),
+  year   = 2024,
+  note   = "R package version: 1.0.1",
+  url    = "https://www.biorxiv.org/content/10.1101/2024.02.02.578715v1"
+)

@@ -18,54 +18,79 @@ library(APCalign)
 ```
 
 <!-- badges: start -->
-[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![](https://www.r-pkg.org/badges/version/APCalign?color=orange)](https://cran.r-project.org/package=APCalign)
 [![Codecov test coverage](https://codecov.io/gh/traitecoevo/APCalign/branch/master/graph/badge.svg)](https://app.codecov.io/gh/traitecoevo/APCalign?branch=master)
 [![R-CMD-check](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/traitecoevo/APCalign/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # APCalign <img src="man/figures/APCalign_hex_2.svg" align="right" width="120"/>
 
-'APCalign' uses the [Australian Plant Census (APC)](https://biodiversity.org.au/nsl/services/search/taxonomy) and [Australian Plant Name Index](https://biodiversity.org.au/nsl/services/search/names) to align and update Australian plant taxon name strings. 'APCalign' also supplies information about
-the established status (native/introduced) of plant taxa across different states/territories.
+`APCalign` uses the [Australian Plant Census (APC)](https://biodiversity.org.au/nsl/services/search/taxonomy) and [Australian Plant Name Index](https://biodiversity.org.au/nsl/services/search/names) to align and update Australian plant taxon name strings. 'APCalign' also supplies information about
+the established status (native/introduced) of plant taxa across different states/territories. It's useful for updating species list and intersecting them with the APC consensus understanding of established status (native/introduced).
 
 ## Installation
 
-'APCalign' is current not on CRAN. Install the currently development version: 
-
 ```{r install, eval= FALSE}
-# install.packages("remotes")
-# remotes::install_github("traitecoevo/APCalign")
 
-library(APCalign)
+ install.packages("remotes")
+ remotes::install_github("traitecoevo/APCalign")
+ 
 ```
 
 ## A quick demo
 
-Generating a look-up table can be done with just one function
+Generating a look-up table can be done with just one function:
 
 ```{r,message=FALSE}
-# Load APC/APNI resources into R
-resources <- load_taxonomic_resources()
 
-# Create lookup 
+library(APCalign)
+
 create_taxonomic_update_lookup( 
   taxa = c(
     "Banksia integrifolia",
     "Acacia longifolia",
     "Commersonia rosea"
-    ),
-  resources = resources
+    )
 )
 ```
 
+if you're going to use APCalign more than once, it will save you time to load the taxonomic resources into memory first:
+
+```{r,message=FALSE}
+
+tax_resources <- load_taxonomic_resources()
+
+create_taxonomic_update_lookup( 
+  taxa = c(
+    "Banksia integrifolia",
+    "Acacia longifolia",
+    "Commersonia rosea",
+    "not a species"
+    ),
+  resources = tax_resources
+)
+```
+
+Checking for a list of species to see if they are classified as Australian natives:
+
+```{r, message=FALSE}
+
+native_anywhere_in_australia(c("Eucalyptus globulus","Pinus radiata"), resources = tax_resources)
+
+```
+## Shiny application
+
+We also developed a shiny application for non-R users to update and align their taxonomic names. You can find the application here: https://unsw.shinyapps.io/APCalign-app
+
 ## Learn more
 
-Highly recommend looking at our [Getting Started](https://traitecoevo.github.io/APCalign/articles/APCalign.html) vignette to learn about how to use 'APCalign'. You can also learn more about our [taxa matching  algorithm](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html) and how [APC/APNI data is cached](https://traitecoevo.github.io/APCalign/articles/caching.html) behind-the-scenes.
+Highly recommend looking at our [Getting Started](https://traitecoevo.github.io/APCalign/articles/APCalign.html) vignette to learn about how to use `APCalign`. You can also learn more about our [taxa matching  algorithm](https://traitecoevo.github.io/APCalign/articles/updating-taxon-names.html).
 
 
 ## Found a bug? 
 
-Did you come across an unexpected taxon name change? Elusive error you can't debug - [submit an issue](https://github.com/traitecoevo/APCalign/issues) and we will try our best to help
+Did you come across an unexpected taxon name change? Elusive error you can't debug - [submit an issue](https://github.com/traitecoevo/APCalign/issues) and we will try our best to help.
 
 ## Comments and contributions
 

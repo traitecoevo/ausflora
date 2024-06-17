@@ -2,7 +2,7 @@
 title: Methods for updating taxon names in APCalign
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{APCalign updating taxon names}
+  %\VignetteIndexEntry{updating taxon names}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:

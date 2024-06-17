@@ -10,7 +10,8 @@
 #' @name APCalign
 #' @docType package
 #' @references If you have any questions, comments or suggestions, please
-#' submit an issue at our [GitHub repository](https://github.com/traitecoevo/APCalign/issues)
+#' submit an issue at our 
+#' [GitHub repository](https://github.com/traitecoevo/APCalign/issues)
 #' @keywords internal
 #' @section Functions:
 #' **Standarise taxon names**
@@ -51,9 +52,12 @@ utils::globalVariables(
     "checked",
     "cleaned_name",
     "family",
+    "family_accepted",
     "fuzzy_match_genus",
     "fuzzy_match_genus_APNI",
     "fuzzy_match_genus_synonym",
+    "fuzzy_match_family",
+    "fuzzy_match_family_synonym",
     "genus",
     "genus_accepted",
     "known",
@@ -75,6 +79,8 @@ utils::globalVariables(
     "taxon_ID",
     "taxon_ID_aligned",
     "taxon_rank",
+    "txtProgressBar",
+    "setTxtProgressBar",
     "taxonomic_status",
     "taxonomic_status_aligned",
     "taxonomic_status_genus",

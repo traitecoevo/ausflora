@@ -29,7 +29,8 @@ test_that("create_taxonomic_update_lookup() returns more/less rows as requested"
     create_taxonomic_update_lookup(
       original_name,
       resources = resources,
-      taxonomic_splits = "most_likely_species"
+      taxonomic_splits = "most_likely_species",
+      quiet = TRUE
     )
 
   expect_equal(out1$original_name, original_name)
@@ -38,17 +39,19 @@ test_that("create_taxonomic_update_lookup() returns more/less rows as requested"
     create_taxonomic_update_lookup(
       original_name,
       resources = resources,
-      taxonomic_splits = "return_all"
+      taxonomic_splits = "return_all",
+      quiet = TRUE
     )
 
-  # order and number of unqiue strings same as input
+  # order and number of unique strings same as input
   expect_equal(unique(out2$original_name), original_name)
   
   out3 <- 
     create_taxonomic_update_lookup(
       original_name,
       resources = resources,
-      taxonomic_splits = "collapse_to_higher_taxon"
+      taxonomic_splits = "collapse_to_higher_taxon",
+      quiet = TRUE
     ) %>%
     dplyr::mutate(
       should_collapse = ifelse(number_of_collapsed_taxa > 1, TRUE, FALSE),
@@ -68,9 +71,11 @@ test_that("align_taxa() executes - no/with fuzzy", {
   aligned_no_fuzzy <- c("Dryandra preissii", "Banksia acuminata", NA)
   
   out1 <- 
-    align_taxa(original_name, resources = resources, fuzzy_matches = TRUE)
+    align_taxa(original_name, resources = resources, fuzzy_matches = TRUE,
+               quiet = TRUE)
   out2 <- 
-    align_taxa(original_name, resources = resources, fuzzy_matches = FALSE)
+    align_taxa(original_name, resources = resources, fuzzy_matches = FALSE,
+               quiet = TRUE)
   
   expect_equal(original_name, out1$original_name)
   expect_equal(aligned_name, out1$aligned_name)
@@ -79,13 +84,31 @@ test_that("align_taxa() executes - no/with fuzzy", {
 })
 
 
+test_that("quiet can be turned on and off", {
+  
+  original_name <- c("Dryandra preissii", "Banksia acuminata", "Bannksia accuminata")
+
+  expect_silent(
+    out1 <- 
+      align_taxa(original_name, resources = resources, fuzzy_matches = TRUE,
+               quiet = TRUE)
+    )
+
+  out1 <- 
+    capture_messages(align_taxa(original_name, resources = resources, fuzzy_matches = TRUE,
+                 quiet = FALSE))
+  expect_true(length(out1) > 1)
+
+})
+
 test_that("align_taxa() executes with longer list", {
   if(is.null(resources)) skip("Server down.")
   species_list <-
     readr::read_csv(system.file("extdata", "species.csv", package = "APCalign"),
                     show_col_types = FALSE) %>% 
     dplyr::slice(1:50)
-  aligned_data <- align_taxa(species_list$name, resources = resources)
+  aligned_data <- align_taxa(species_list$name, resources = resources, 
+                             quiet = TRUE)
   
   expect_equal(nrow(aligned_data), 50)
   expect_equal(species_list$name, aligned_data$original_name)
@@ -97,7 +120,7 @@ test_that("update_taxonomy() runs and prdouces suitable structure", {
   original_name <- c("Dryandra preissii", "Banksia acuminata")
   
   aligned_data <- 
-    align_taxa(original_name, resources = resources)
+    align_taxa(original_name, resources = resources, quiet = TRUE)
   
   out1 <-
     update_taxonomy(
@@ -112,7 +135,8 @@ test_that("update_taxonomy() runs and prdouces suitable structure", {
   out2 <-
     create_taxonomic_update_lookup(
       aligned_data$original_name, resources = resources,
-      taxonomic_splits = "most_likely_species"
+      taxonomic_splits = "most_likely_species",
+      quiet = TRUE
     )
 
   v <- intersect(names(out1) , names(out2))
@@ -126,7 +150,7 @@ test_that("check runs with weird hybrid symbols", {
   if(is.null(resources)) skip("Server down.")
   original_name <- c("Platanus × acerifolia", "Platanus × hispanica")
   
-  out <- align_taxa(original_name, resources = resources)
+  out <- align_taxa(original_name, resources = resources, quiet = TRUE)
   
   expect_equal(standardise_names(original_name), out$cleaned_name)
   expect_equal(standardise_names(original_name), out$aligned_name)
@@ -137,7 +161,7 @@ test_that("handles NAs inn inputs", {
   if(is.null(resources)) skip("Server down.")
   original_name <- c("Acacia aneura", NA)
 
-  out1 <- align_taxa(original_name, resources = resources)
+  out1 <- align_taxa(original_name, resources = resources, quiet = TRUE)
 
   expect_equal(original_name, out1$original_name)
   
@@ -145,13 +169,14 @@ test_that("handles NAs inn inputs", {
     create_taxonomic_update_lookup(
       original_name, 
       taxonomic_splits = "most_likely_species",
-      resources = resources
+      resources = resources,
+      quiet = TRUE
       )
   
   expect_equal(original_name, out2$original_name)
   expect_equal(original_name, out2$aligned_name)
   expect_equal(original_name, out2$accepted_name)
-  expect_equal(original_name[1], stringr::word(out2$suggested_name[1], start = 1, end = 2))
+  expect_equal(original_name[1], word(out2$suggested_name[1], start = 1, end = 2))
 
   })
 
@@ -169,7 +194,7 @@ test_that("handles weird strings", {
   )
 
   out1 <- 
-    align_taxa(test_strings, resources = resources)
+    align_taxa(test_strings, resources = resources, quiet = TRUE)
   
   expect_equal(test_strings, out1$original_name)
   
@@ -177,7 +202,8 @@ test_that("handles weird strings", {
     create_taxonomic_update_lookup(
       test_strings, 
       taxonomic_splits = "most_likely_species",
-      resources = resources)
+      resources = resources,
+      quiet = TRUE)
 
   expect_equal(nrow(out1), length(test_strings))
   expect_equal(out1$original_name, test_strings)
@@ -202,13 +228,14 @@ test_that("handles APNI taxa and genus level IDs",{
   genus_updated <- c("Acacia", "Dendropanax", "Acanthopanax", "Eucalyptus")
   
   out1 <- 
-    align_taxa(original_name, resources = resources)
+    align_taxa(original_name, resources = resources, quiet = TRUE)
   
   out2 <- 
     create_taxonomic_update_lookup(
       original_name, 
       taxonomic_splits = "most_likely_species",
       resources = resources, 
+      quiet = TRUE,
       output = NULL)
   
   expect_equal(original_name, out1$original_name)
@@ -222,7 +249,7 @@ test_that("handles APNI taxa and genus level IDs",{
   
   expect_gte(nrow(out1), 4)
   
-  expect_false(any(str_detect(out2$suggested_name, "NA sp.")))
+  expect_false(any(stringr::str_detect(out2$suggested_name, "NA sp.")))
   expect_equal(out2$accepted_name, rep(NA_character_, nrow(out2)))
   
   })
@@ -234,7 +261,8 @@ test_that("Runs when neither taxa in in APC", {
   out <- 
     create_taxonomic_update_lookup(
       taxa = original_name,
-      resources = resources, taxonomic_splits = "most_likely_species"
+      resources = resources, taxonomic_splits = "most_likely_species",
+      quiet = TRUE
     )
   
   # output should be same order and length as input
@@ -244,13 +272,17 @@ test_that("Runs when neither taxa in in APC", {
 test_that("no matches to APC accepted names are required", {
   if(is.null(resources)) skip("Server down.")
   # some genus matches
-  out1 <- create_taxonomic_update_lookup(taxa = c("Eucalyptus", "Banksia asdasd", "Ryandra sp"), resources = resources)
+  out1 <- create_taxonomic_update_lookup(
+    taxa = c("Eucalyptus", "Banksia asdasd", "Ryandra sp"), 
+    resources = resources, quiet = TRUE)
   expect_equal(nrow(out1), 3)
   
   # all garbage
-  out2 <- create_taxonomic_update_lookup(taxa = c("Aucalyptus", "Danksia asdasd", "Ryandra sp"), resources = resources)
+  out2 <- create_taxonomic_update_lookup(
+    taxa = c("Aucalyptus", "Danksia asdasd", "Ryandra sp"), 
+    resources = resources, quiet = TRUE)
   expect_equal(nrow(out2), 3)
-  expect_equal(out2$aligned_name, c(NA_character_, NA_character_, NA_character_))
+  expect_equal(out2$aligned_name, c(NA, "Dansiea sp. [Danksia asdasd]", "Randia sp."))
 })
 
 test_that("returns same number of rows as input, even with duplicates", {
@@ -264,7 +296,8 @@ test_that("returns same number of rows as input, even with duplicates", {
   out1 <- 
     align_taxa(
       original_name <- original_name,
-      resources = resources
+      resources = resources, 
+      quiet = TRUE
       )
 
   out2 <-
@@ -278,14 +311,15 @@ test_that("returns same number of rows as input, even with duplicates", {
     create_taxonomic_update_lookup(
       taxa = original_name,
       resources = resources, 
-      taxonomic_splits = "most_likely_species")
+      taxonomic_splits = "most_likely_species", 
+      quiet = TRUE)
   
   
   out4 <- 
     align_taxa(
       original_name <- original_name,
       resources = resources,
-      full = TRUE
+      full = TRUE, quiet = TRUE
     )
   
 # outputs should be same order and length as input
@@ -304,7 +338,7 @@ test_that("returns same number of rows as input, even with duplicates", {
   expect_equal(subset(out2$aligned_name, !duplicated(out2$aligned_name)), subset(out1$aligned_name, !duplicated(out1$aligned_name)))
   expect_gte(length(out2$aligned_name), length(out1$aligned_name))
   expect_equal(ncol(out1), 7) #limited columns (full = FALSE, the default)
-  expect_equal(ncol(out4), 24) #all columns (full = TRUE)
+  expect_equal(ncol(out4), 26) #all columns (full = TRUE)
   
   #
   expect_equal(out3$original_name, original_name)

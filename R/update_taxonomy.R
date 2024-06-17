@@ -1,50 +1,92 @@
-#' For a list of taxon names aligned to the APC, update the name to an accepted taxon concept per the APC and add scientific name and taxon concept metadata to names aligned to either the APC or APNI. 
+#' @title Update to currently accepted APC name and add APC/APNI name metadata 
+#' 
+#' @description
+#' For a list of taxon names aligned to the APC, update the name to an accepted
+#' taxon concept per the APC and add scientific name and taxon concept metadata 
+#' to names aligned to either the APC or APNI. 
 #'
-#' This function uses the APC to update the taxonomy of names aligned to a taxon concept listed in the APC to the currently accepted name for the taxon concept. 
-#' The aligned_data data frame that is input must contain 5 columns, 
-#' `original_name`, `aligned_name`, `taxon_rank`, `taxonomic_dataset`, and `aligned_reason`. 
-#' The aligned name is a plant name that has been aligned to a taxon name in the APC or APNI by the align_taxa function.
+#' @details
+#' - This function uses the APC to update the taxonomy of names aligned to a
+#' taxon concept listed in the APC to the currently accepted name for the taxon 
+#' concept. 
+#' - The aligned_data data frame that is input must contain 5 columns, 
+#' `original_name`, `aligned_name`, `taxon_rank`, `taxonomic_dataset`, and 
+#' `aligned_reason`. (These are the columns output by the function `align_taxa`.) 
+#' - The aligned name is a plant name that has been aligned to a taxon name in 
+#' the APC or APNI by the align_taxa function.
+#' 
+#' Notes:
+#' - As the input for this function is a table with 5 columns (output by 
+#' align_taxa), this function will only be used when you explicitly want to 
+#' separate the alignment and updating components of APCalign. This function is 
+#' the second half of create_taxonomic_update_lookup.
 #'
 #' @family taxonomic alignment functions
 #'
-#' @param aligned_data A tibble of plant names to update. This table must include 5 columns, original_name, aligned_name, taxon_rank, taxonomic_dataset, and aligned_reason.
+#' @param aligned_data A tibble of plant names to update. This table must 
+#' include 5 columns, original_name, aligned_name, taxon_rank, 
+#' taxonomic_dataset, and aligned_reason.
 #' These columns are created by the function `align_taxa`. 
-#' The columns `original_name` and `aligned_name` must be in the format of the scientific name, with genus and species, 
-#' and may contain additional qualifiers such as subspecies or varieties. The names are case insensitive.
-#'
-#' @param taxonomic_splits Variable that determines what protocol to use to update taxon names that are ambiguous due to taxonomic splits. 
+#' The columns `original_name` and `aligned_name` must be in the format of the 
+#' scientific name, with genus and species, 
+#' and may contain additional qualifiers such as subspecies or varieties. The 
+#' names are case insensitive.
+#' @param taxonomic_splits Variable that determines what protocol to use to 
+#' update taxon names that are ambiguous due to taxonomic splits. 
 #' The three options are:
-#'    most_likely_species, which returns the species name in use before the split; alternative names are returned in a separate column
-#'    return_all, which returns all possible names
-#'    collapse_to_higher_taxon, which declares that an ambiguous name cannot be aligned to an accepted species/infraspecific name and the name is demoted to genus rank
-#' 
-#' @param output (optional) Name of the file where results are saved. The default is NULL and no file is created.
-#' If specified, the output will be saved in a CSV file with the given name.
+#'    - `most_likely_species`, which returns the species name in use before the 
+#'    split; alternative names are returned in a separate column
+#'   - `return_all`, which returns all possible names
+#'   - `collapse_to_higher_taxon`, which declares that an ambiguous name cannot 
+#'   be aligned to an accepted species/infraspecific name and the name is 
+#'   demoted to genus rank
+#' @param quiet Logical to indicate whether to display messages while updating 
+#' taxa.
+#' @param output (optional) Name of the file where results are saved. The 
+#' default is NULL and no file is created. If specified, the output will be 
+#' saved in a CSV file with the given name.
+#' @param resources the taxonomic resources required to make the summary 
+#' statistics.  Loading this can be slow, so call load_taxonomic_resources 
+#' separately to greatly speed this function up and pass the resources in.
 #'
-#' @param resources the taxonomic resources required to make the summary statistics.  Loading this can be slow, so call load_taxonomic_resources separately to greatly speed this function up and pass the resources in.
 #'
-#'
-#' @return A tibble with updated taxonomy for the specified plant names. The tibble contains the following columns:
+#' @return A tibble with updated taxonomy for the specified plant names. The 
+#' tibble contains the following columns:
 #' - original_name: the original plant name.
-#' - aligned_name: the input plant name that has been aligned to a taxon name in the APC or APNI by the align_taxa function.
+#' - aligned_name: the input plant name that has been aligned to a taxon name 
+#' in the APC or APNI by the align_taxa function.
 #' - accepted_name: the APC-accepted plant name, when available.
-#' - suggested_name: the suggested plant name to use. Identical to the accepted_name, when an accepted_name exists; otherwise the the suggested_name is the aligned_name.
-#' - genus: the genus of the accepted (or suggested) name; only APC-accepted genus names are filled in.
-#' - family: the family of the accepted (or suggested) name; only APC-accepted family names are filled in.
+#' - suggested_name: the suggested plant name to use. Identical to the 
+#' accepted_name, when an accepted_name exists; otherwise the the suggested_name
+#'  is the aligned_name.
+#' - genus: the genus of the accepted (or suggested) name; only APC-accepted 
+#' genus names are filled in.
+#' - family: the family of the accepted (or suggested) name; only APC-accepted 
+#' family names are filled in.
 #' - taxon_rank: the taxonomic rank of the suggested (and accepted) name.
-#' - taxonomic_dataset: the source of the suggested (and accepted) names (APC or APNI).
+#' - taxonomic_dataset: the source of the suggested (and accepted) names (APC or
+#'  APNI).
 #' - taxonomic_status: the taxonomic status of the suggested (and accepted) name.
-#' - taxonomic_status_aligned: the taxonomic status of the aligned name, before any taxonomic updates have been applied.
-#' - aligned_reason: the explanation of a specific taxon name alignment (from an original name to an aligned name).
-#' - update_reason: the explanation of a specific taxon name update (from an aligned name to an accepted or suggested name).
+#' - taxonomic_status_aligned: the taxonomic status of the aligned name, before 
+#' any taxonomic updates have been applied.
+#' - aligned_reason: the explanation of a specific taxon name alignment (from an 
+#' original name to an aligned name).
+#' - update_reason: the explanation of a specific taxon name update (from an 
+#' aligned name to an accepted or suggested name).
 #' - subclass: the subclass of the accepted name.
-#' - taxon_distribution: the distribution of the accepted name; only filled in if an APC accepted_name is available.
-#' - scientific_name_authorship: the authorship information for the accepted (or synonymous) name; available for both APC and APNI names.
-#' - taxon_ID: the unique taxon concept identifier for the accepted_name; only filled in if an APC accepted_name is available.
-#' - taxon_ID_genus: an identifier for the genus; only filled in if an APC-accepted genus name is available.
-#' - scientific_name_ID: an identifier for the nomenclatural (not taxonomic) details of a scientific name; available for both APC and APNI names.
+#' - taxon_distribution: the distribution of the accepted name; only filled in 
+#' if an APC accepted_name is available.
+#' - scientific_name_authorship: the authorship information for the accepted 
+#' (or synonymous) name; available for both APC and APNI names.
+#' - taxon_ID: the unique taxon concept identifier for the accepted_name; only 
+#' filled in if an APC accepted_name is available.
+#' - taxon_ID_genus: an identifier for the genus; only filled in if an 
+#' APC-accepted genus name is available.
+#' - scientific_name_ID: an identifier for the nomenclatural (not taxonomic) 
+#' details of a scientific name; available for both APC and APNI names.
 #' - row_number: the row number of a specific original_name in the input.
-#' - number_of_collapsed_taxa: when taxonomic_splits == "collapse_to_higher_taxon", the number of possible taxon names that have been collapsed.
+#' - number_of_collapsed_taxa: when taxonomic_splits == "collapse_to_higher_taxon", 
+#' the number of possible taxon names that have been collapsed.
 #'   
 #'
 #' @seealso load_taxonomic_resources
@@ -53,19 +95,25 @@
 #'
 #' @examples
 #' # Update taxonomy for two plant names and print the result
-#' \donttest{update_taxonomy(
-#'  tibble::tibble(
+#' \donttest{
+#' resources <- load_taxonomic_resources()
+#' 
+#' update_taxonomy(
+#'  dplyr::tibble(
 #'    original_name = c("Dryandra preissii", "Banksia acuminata"),
 #'    aligned_name = c("Dryandra preissii", "Banksia acuminata"),
 #'    taxon_rank = c("species", "species"),
 #'    taxonomic_dataset = c("APC", "APC"),
-#'    aligned_reason = NA_character_
-#'  )
+#'    aligned_reason = c(NA_character_,
+#'    NA_character_)
+#'  ),
+#'  resources = resources
 #' )
 #' }
 
 update_taxonomy <- function(aligned_data,
                             taxonomic_splits = "most_likely_species",
+                            quiet = TRUE,
                             output = NULL,
                             resources = load_taxonomic_resources()) {
     
@@ -116,7 +164,7 @@ update_taxonomy <- function(aligned_data,
   
   ## create a blank tibble with all columns, for taxon lists where some columns aren't created in any of the individual tibbles
   taxa_blank <-
-      tibble::tibble(
+      dplyr::tibble(
         original_name = character(0L),
         aligned_name = character(0L),
         accepted_name = character(0L),
@@ -191,8 +239,11 @@ update_taxonomy <- function(aligned_data,
   taxa_out <- taxa_out  %>% dplyr::arrange(row_number)
 
   if (!is.null(output)) {
+    taxa_out$checked<-TRUE
+    taxa_out$known<-!is.na(taxa_out$accepted_name)
     readr::write_csv(taxa_out, output)
-    message("  - output saved in file: ", output)
+    if(!quiet)
+      message("  - output saved in file: ", output)
   }
   
   taxa_out
@@ -229,8 +280,7 @@ relevel_taxonomic_status_preferred_order <- function(taxonomic_status) {
       "included"
     )
   
-  forcats::fct_relevel(
-    taxonomic_status,
+  factor(taxonomic_status, levels =
     subset(
       preferred_order, 
       preferred_order %in% taxonomic_status
@@ -329,16 +379,44 @@ update_taxonomy_APC_family <- function(data, resources) {
 
   if(is.null(data)) return(NULL)
 
+  families <- resources$family_accepted %>% 
+                dplyr::bind_rows(resources$family_synonym) %>%
+                dplyr::mutate(family = genus)
+
   data %>%
     dplyr::mutate(
-      suggested_name = aligned_name,
-      accepted_name = NA_character_,
       family = genus,
       genus = NA_character_,
-      taxonomic_status_genus = NA_character_,
+      taxonomic_status_genus = NA_character_
+    ) %>%  
+    dplyr::left_join(
+      by = "family",
+      families %>%
+        dplyr::arrange(canonical_name, taxonomic_status) %>%
+        dplyr::distinct(canonical_name, .keep_all = TRUE) %>%
+        dplyr::select(
+          family,
+          accepted_name_usage_ID,
+          taxonomic_status
+        )
+    ) %>%
+    dplyr::mutate(my_order = relevel_taxonomic_status_preferred_order(taxonomic_status)) %>%
+    dplyr::arrange(aligned_name, my_order) %>%
+    dplyr::mutate(
+      # if required, update the family name in the `aligned_name` to the currently APC-accepted family
+      family_accepted = families$canonical_name[match(accepted_name_usage_ID, families$taxon_ID)]
+    ) %>%
+    dplyr::mutate(
+      accepted_name = NA_character_,
+      # family names in `aligned_name` that are not APC-accepted need to be updated to their current name in `suggested_name`
+      aligned_minus_genus = stringr::str_replace(aligned_name, family, ""),
+      # if there is an APC-accepted genus, replace whatever the initial genus was with the accepted genus, otherwise the suggested name is the aligned name
+      suggested_name = ifelse(my_order == "accepted", aligned_name, paste0(family_accepted, aligned_minus_genus)),
       taxonomic_status = "family accepted",
-      taxonomic_dataset = "APC"
-    )
+      taxonomic_dataset = "APC",
+      family = family_accepted
+    ) %>%
+    dplyr::select(-accepted_name_usage_ID, -family_accepted, -my_order)
 }
 
 # Function to update names of taxa whose aligned_names are
@@ -424,7 +502,7 @@ update_taxonomy_APC_species_and_infraspecific_taxa <- function(data, resources, 
     dplyr::group_by(canonical_name) %>%
     dplyr::mutate(
       number_of_collapsed_taxa = sum(number_of_collapsed_taxa),
-      accepted_name_2 = paste(stringr::word(accepted_name_2, 1), "sp."),
+      accepted_name_2 = paste(word(accepted_name_2, 1), "sp."),
       alternative_possible_names = 
                     alternative_accepted_name_tmp %>%
                     unique() %>%
@@ -437,7 +515,7 @@ update_taxonomy_APC_species_and_infraspecific_taxa <- function(data, resources, 
     dplyr::mutate(
       alternative_possible_names = ifelse(taxonomic_status_aligned != "accepted" & canonical_name %in% resources$'APC list (accepted)'$canonical_name, NA, alternative_possible_names),
       alternative_possible_names = stringr::str_replace_all(alternative_possible_names, "\\ \\|\\ NA", ""),
-      suggested_collapsed_name = paste(stringr::word(accepted_name_2, 1), "sp. [collapsed names:", alternative_possible_names, "]"),
+      suggested_collapsed_name = paste(word(accepted_name_2, 1), "sp. [collapsed names:", alternative_possible_names, "]"),
       taxon_rank = ifelse(number_of_collapsed_taxa > 1 & species_and_infraspecific(taxon_rank), "genus", taxon_rank)
     ) %>%
     dplyr::select(-alternative_accepted_name_tmp, -alternative_possible_names)
@@ -529,7 +607,7 @@ update_taxonomy_APC_species_and_infraspecific_taxa <- function(data, resources, 
       ## there are rare cases of names within the APC that do not align to an accepted name.
       ## For these taxa, the `suggested_name` is the `aligned_name` and the family name must be added
       genus = ifelse(is.na(genus_accepted), genus, genus_accepted),
-      family = ifelse(is.na(family), resources$APC$family[match(stringr::word(suggested_name, 1), resources$APC$genus)], family),
+      family = ifelse(is.na(family), resources$APC$family[match(word(suggested_name, 1), resources$APC$genus)], family),
       update_reason = ifelse(
           (number_of_collapsed_taxa > 1) & !is.na(number_of_collapsed_taxa),
           "collapsed to genus due to ambiguity",
@@ -539,7 +617,7 @@ update_taxonomy_APC_species_and_infraspecific_taxa <- function(data, resources, 
     ## next line just in case duplication snuck in - there are rare cases where one of the left_joins duplicates a row 
     dplyr::distinct(row_number, original_name, aligned_name, accepted_name, .keep_all = TRUE) %>%
     dplyr::select(original_name, aligned_name, suggested_name, accepted_name, accepted_name_2, 
-                  taxonomic_status, taxonomic_status_aligned, taxon_rank, number_of_collapsed_taxa, everything())
+                  taxonomic_status, taxonomic_status_aligned, taxon_rank, number_of_collapsed_taxa, dplyr::everything())
 }
 
 # Function to update names of taxa whose aligned_names are
@@ -577,7 +655,7 @@ update_taxonomy_APNI_species_and_infraspecific_taxa <- function(data, resources)
         aligned_name,
         suggested_name
       ),
-      genus = stringr::word(suggested_name, 1)
+      genus = word(suggested_name, 1)
     ) %>%
     # when possible the genus of APNI names is matched to an APC-accepted genus and the appropriate genus-level taxon_ID is added
     dplyr::left_join(

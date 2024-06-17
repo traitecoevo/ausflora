@@ -2,7 +2,7 @@
 % Please edit documentation in R/native_anywhere_in_australia.R
 \name{native_anywhere_in_australia}
 \alias{native_anywhere_in_australia}
-\title{For a vector of taxon names in to the APC, check if the species are native anywhere in Australia}
+\title{Native anywhere in Australia}
 \usage{
 native_anywhere_in_australia(species, resources = load_taxonomic_resources())
 }
@@ -10,18 +10,30 @@ native_anywhere_in_australia(species, resources = load_taxonomic_resources())
 \item{species}{A character string typically representing the binomial for the species.}
 
 \item{resources}{An optional list of taxonomic resources to use for the lookup.
-If not provided, the function will load default taxonomic resources using the \code{load_taxonomic_resources()} function.}
+If not provided, the function will load default taxonomic resources using the
+\code{load_taxonomic_resources()} function.}
 }
 \value{
-A tibble with two columns: \code{species}, which is the same as the unique values of the input \code{species},
-and \code{native_anywhere_in_aus}, a vector indicating whether each species is native anywhere in Australia, introduced by humans from elsewhere, or unknown with respect to the APC resource.
+A tibble with two columns: \code{species}, which is the same as the unique values of
+the input \code{species}, and \code{native_anywhere_in_aus}, a vector indicating whether each
+species is native anywhere in Australia, introduced by humans from elsewhere, or
+unknown with respect to the APC resource.
 }
 \description{
-This function checks if the given species is native anywhere in Australia according to the APC.
-Note that this will not detect within-Australia introductions, e.g. if a species is from Western Australia and is invasive on the east coast.
-And recent invasions are unlikely to be documented yet in APC.
-For the complete matrix of species by states that also represents within-Australia invasions,
-use \link{create_species_state_origin_matrix}.  For spelling checks and taxonomy updates please see \link{create_taxonomic_update_lookup}.
+This function checks which species from a list is thought to be native anywhere in
+Australia according to the APC.
+}
+\details{
+Important caveats:
+\itemize{
+\item This function will not detect within-Australia introductions,
+e.g. if a species is from Western Australia and is invasive on the east coast.
+\item Very recent invasions are unlikely to be documented yet in APC.
+\item Ideally check spelling and taxonomy updates first via
+\link{create_taxonomic_update_lookup}.
+\item For the complete matrix of species by states that also represents
+within-Australia invasions, use \link{create_species_state_origin_matrix}.
+}
 }
 \examples{
 \donttest{native_anywhere_in_australia(c("Eucalyptus globulus","Pinus radiata","Banksis notaspecies"))}

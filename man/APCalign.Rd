@@ -32,7 +32,8 @@ the established status of plant taxa across different states/territories.
 
 \references{
 If you have any questions, comments or suggestions, please
-submit an issue at our \href{https://github.com/traitecoevo/APCalign/issues}{GitHub repository}
+submit an issue at our
+\href{https://github.com/traitecoevo/APCalign/issues}{GitHub repository}
 }
 \seealso{
 Useful links:

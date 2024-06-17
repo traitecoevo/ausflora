@@ -1,6 +1,6 @@
 Package: APCalign
 Title: Resolving Plant Taxon Names Using the Australian Plant Census
-Version: 0.1.4
+Version: 1.0.1
 Authors@R: c(
   person(given = "Daniel", family = "Falster", role = c("aut", "cre", "cph"), email = "daniel.falster@unsw.edu.au", comment = c(ORCID = "0000-0002-9814-092X")),
   person(given = "Elizabeth", family = "Wenk", role = c("aut", "ctb"), email = "e.wenk@unsw.edu.au", comment = c(ORCID = "0000-0001-5640-5910")),
@@ -18,11 +18,10 @@ Depends:
 Imports:
     readr,
     purrr,
-    forcats,
-    tibble,
     dplyr,
     stringr,
     stringi,
+    stringdist,
     crayon,
     parallel,
     httr,
@@ -39,7 +38,6 @@ Suggests:
     kableExtra,
     here,
     testthat (>= 3.0.0)
-Remotes: apache/arrow/r
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Config/testthat/edition: 3
